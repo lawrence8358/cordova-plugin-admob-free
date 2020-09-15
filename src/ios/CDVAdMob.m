@@ -425,7 +425,8 @@
     } else if ([string isEqualToString:@"FLUID"]) {
         return kGADAdSizeFluid;
     } else if ([string isEqualToString:@"SMART_BANNER"]) {
-        CGRect pr = self.webView.superview.bounds;
+        UIView *webView = self.webView;
+        CGRect pr = webView.superview.bounds; 
         if(pr.size.width > pr.size.height) {
             return kGADAdSizeSmartBannerLandscape;
         }
@@ -529,8 +530,9 @@
     NSLog(@"__createBanner");
 
     // set background color to black
-    //self.webView.superview.backgroundColor = [UIColor blackColor];
-    //self.webView.superview.tintColor = [UIColor whiteColor];
+    // UIView *webView = self.webView;
+    // webView.superview.backgroundColor = [UIColor blackColor];
+    // webView.superview.tintColor = [UIColor whiteColor];
 
     if (!self.bannerView){
         self.bannerView = [[GADBannerView alloc] initWithAdSize:adSize];
@@ -599,7 +601,8 @@
     } else if (show) {
         //NSLog(@"show now: %d", show);
 
-        UIView* parentView = self.bannerOverlap ? self.webView : [self.webView superview];
+        UIView* view = self.webView;
+        UIView* parentView = self.bannerOverlap ? self.webView : [view superview];
         [parentView addSubview:self.bannerView];
         [parentView bringSubviewToFront:self.bannerView];
         [self resizeViews];
@@ -665,8 +668,9 @@
 {
     if (@available(iOS 11.0, *)) {
 
-        UIView* parentView = self.bannerOverlap ? self.webView : [self.webView superview];
-        CGRect pr = self.webView.superview.bounds;
+        UIView *view = self.webView;
+        UIView* parentView = self.bannerOverlap ? self.webView : [view superview]; 
+        CGRect pr = view.superview.bounds; 
 
         CGRect safeAreaFrame = CGRectMake(0, 0, 0, 0);
 
@@ -680,13 +684,14 @@
         _safeAreaBackgroundView.autoresizesSubviews = YES;
         _safeAreaBackgroundView.hidden = true;
 
-        [self.webView.superview addSubview:_safeAreaBackgroundView];
+        [view.superview addSubview:_safeAreaBackgroundView];
     }
 }
 
 - (void)resizeViews {
     // Frame of the main container view that holds the Cordova webview.
-    CGRect pr = self.webView.superview.bounds, wf = pr;
+    UIView *view = self.webView;
+    CGRect pr = view.superview.bounds, wf = pr;
     //NSLog(@"super view: %d x %d", (int)pr.size.width, (int)pr.size.height);
 
     // iOS7 Hack, handle the Statusbar
@@ -714,7 +719,7 @@
         CGRect bf = self.bannerView.frame;
 
         // If the ad is not showing or the ad is hidden, we don't want to resize anything.
-        UIView* parentView = self.bannerOverlap ? self.webView : [self.webView superview];
+        UIView* parentView = self.bannerOverlap ? self.webView : [view superview];
         BOOL adIsShowing = ([self.bannerView isDescendantOfView:parentView]) && (! self.bannerView.hidden);
 
         if( adIsShowing ) {
