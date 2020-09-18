@@ -6,7 +6,6 @@
 *.log
 *.lock
 node_modules/
-coverage/
-www/
+coverage/ 
 gh-pages/
 package-lock.json
